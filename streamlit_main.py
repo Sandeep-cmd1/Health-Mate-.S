@@ -1,12 +1,22 @@
 import streamlit as st
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor
 import google.generativeai as genai
 
-# Load API Key from .env
+# Load .env locally
 load_dotenv()
-api_key = os.getenv("GEMINI_API_KEY")
+
+# Get API Key from Streamlit secrets or .env
+# Try secrets first, fallback to .env
+try:
+    api_key = st.secrets["GEMINI_API_KEY"]
+except Exception:
+    api_key = os.getenv("GEMINI_API_KEY")
+
+if not api_key:
+    st.error("❌ GEMINI_API_KEY not found in st.secrets or .env")
+    st.stop()
 
 # Configure Gemini
 genai.configure(api_key=api_key)
@@ -62,7 +72,7 @@ st.set_page_config(page_title="Weekly Health Plan", layout="centered")
 st.title("🌱 Health Mate")
 
 with st.sidebar:
-    st.header("🧑‍⚕️ User Profile Input")
+    st.header("🧑‍⚕️ User Profile")
 
     age = st.number_input("Age (years)", min_value=10, max_value=100, value=30)
     weight = st.number_input("Weight (kg)", min_value=20, max_value=200, value=50)
@@ -87,9 +97,9 @@ if generate:
         "fitness_goals": fitness_goals
     }
 
-    st.info("Generating personalized health plan... please wait ⏳")
-    weekly_plan = runner_fn(user_profile)
+    with st.spinner("Generating personalized health plan... please wait ⏳"):
+        weekly_plan = runner_fn(user_profile)
 
     st.success("✅ Your Weekly Health Plan is Ready!")
-    st.markdown("### 📋 Weekly Health Plan ")
+    st.markdown("### 📋 Weekly Health Plan")
     st.markdown(weekly_plan)

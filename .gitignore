@@ -1,2 +1,4 @@
 .env
+secrets.toml
 backup_main.py
+backup_streamlit_main.py
