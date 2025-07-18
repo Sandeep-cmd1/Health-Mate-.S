@@ -4,9 +4,10 @@
     System will automatically generate a personalized weekly health plan for a user.
 
 
-2)How to set the API key in .env:
+2)How to set the API key in .env and secrets(streamlit):
 
-    In .env file, replace "your_api_key_here" with original api key without ""
+    [.env case] In code editor, create a .env file, enter GEMINI_API_KEY = "enter_your_original_api_key_here" without " "
+    [secrets case] In code editor, create a secrets.toml file, enter GEMINI_API_KEY = "enter_your_original_api_key_here" or in streamlit app, go to SECRETS tab and insert GEMINI_API_KEY = "enter_your_original_api_key_here"
 
 
 3)Sample input/output for each plan type:
